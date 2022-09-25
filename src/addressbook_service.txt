@@ -1,0 +1,54 @@
+create database addressbook_service;
+show databases;
+use addressbook_service;
+create table addressbook(id int auto_increment,
+ firstName varchar(25),
+lastName varchar(25),
+address varchar(70),
+city varchar(25),
+state varchar(25),
+zipCode int,
+phoneNumber long,
+email varchar(20),
+primary key(id));
+
+insert into addressbook(firstName,lastName,address,city,state,zipCode,phoneNumber,email)
+values('surabhi','bhagat','kothrud','pune','maharashtra',411038,9854123659,'sur12@gmail.com'),
+('manoj','mahajan','warje','pune','maharashtra',411035,8541236598,'manu32@gmail.com');
+
+desc addressbook;
+drop table addressbook;
+
+select * from addressbook;
+
+update addressbook set address = 'pimpri' where firstName = 'manoj';
+
+delete from addressbook where firstName = 'manoj';
+
+insert into addressbook(firstName, lastName, address, city, state, zipCode, phoneNumber, email) values('nikita','shinde','shivajinagar','pune','maharashtra',411025,8541236958,'niki43@gmail.com'),
+('chetan','roy','nagar','bhopal','mp',263541,7845123695,'chetan@gmail.com'),
+('sayali','jain','chandannagar','bhopal','mp',263542,8596523145,'sayali@gmail.com');
+
+select * from addressbook where city = 'pune' or state = 'maharashtra';
+select count(city) from addressbook where city = 'bhopal';
+select count(state) from addressbook where state = 'maharashtra';
+select * from addressbook where city = 'pune' order by firstName;
+
+alter table addressbook add column addressbook_name varchar(20), add column addressbook_type varchar(20);
+
+update addressbook set addressbook_name = 'book1' , addressbook_type = 'family' where firstName = 'surabhi';
+update addressbook set addressbook_name = 'book2' , addressbook_type = 'friends' where firstName = 'nikita';
+update addressbook set addressbook_name = 'book1' , addressbook_type = 'family' where firstName = 'chetan';
+update addressbook set addressbook_name = 'book2' , addressbook_type = 'friends' where firstName = 'sayali';
+
+select * from addressbook;
+select addressbook_type, count(*) from addressbook group by addressbook_type;
+
+create table family(id int auto_increment, firstName varchar(20), lastName varchar(20), address varchar(30), city varchar(15),state varchar(20), zipCode varchar(6), phoneNumber varchar(10), email varchar(30),addressbook_name varchar(15), addressbook_type varchar(10),primary key(id),foreign key (id) references addressbook(id));
+insert into family select * from addressbook where addressbook_type="family";
+select * from family;
+
+select * from addressbook;
+create table friends(id int auto_increment, firstName varchar(20), lastName varchar(20), address varchar(30), city varchar(15),state varchar(20), zipCode varchar(6), phoneNumber varchar(10), email varchar(30),addressbook_name varchar(15), addressbook_type varchar(10),primary key(id),foreign key (id) references addressbook(id));
+insert into friends select * from addressbook where addressbook_type="friends";
+select * from friends;
